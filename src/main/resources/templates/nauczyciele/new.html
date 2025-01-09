@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Dodaj nowego nauczyciela</h1>
+    <hr/>
+    <form th:action="@{/nauczyciele/save}" th:object="${nauczyciel}" method="post">
+        <div class="form-group">
+            <label for="imie">Imię</label>
+            <input type="text" class="form-control" id="imie" name="imie" th:field="*{imie}" required/>
+        </div>
+        <div class="form-group mt-3">
+            <label for="nazwisko">Nazwisko</label>
+            <input type="text" class="form-control" id="nazwisko" name="nazwisko" th:field="*{nazwisko}" required/>
+        </div>
+
+        <!-- Wybór przedmiotów -->
+        <div class="form-group mt-3">
+            <label for="przedmioty">Przedmioty</label>
+            <select id="przedmioty" name="przedmioty" class="form-control" multiple>
+                <option th:each="przedmiot : ${listPrzedmioty}"
+                        th:value="${przedmiot.id}"
+                        th:text="${przedmiot.nazwaPrzedmiotu}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Wybór klasy -->
+        <div class="form-group mt-3">
+            <label for="klasy">Wybierz klasę (jako wychowawca)</label>
+            <select id="klasy" name="klasaId" class="form-control">
+                <option value="" th:text="'Brak klasy'"></option>
+                <option th:each="klasa : ${klasy}"
+                        th:value="${klasa.id}"
+                        th:text="${klasa.nazwaKlasy}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group mt-3 text-right">
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+            <a class="btn btn-secondary" th:href="@{/nauczyciele/}">Anuluj</a>
+        </div>
+    </form>
+</div>
+</html>

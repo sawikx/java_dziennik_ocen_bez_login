@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Lista ocen</h1>
+    <hr/>
+    <div class="row mt-1">
+        <div class="col-12 text-right">
+            <a class="btn btn-primary" th:href="@{'/oceny/new'}">+ Nowa ocena</a>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Uczeń</th>
+                    <th>ocena</th>
+                    <th>Klasa</th>
+                    <th>Przedmiot</th>
+                    <th>Nauczyciel</th>
+                    <th>Data oceny</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ocena : ${listOceny}">
+                    <!-- Wyświetlanie imienia i nazwiska ucznia -->
+                    <td th:text="${ocena.uczen.imie + ' ' + ocena.uczen.nazwisko}">Uczeń</td>
+                    <td th:text="${ocena.ocena}">Uczeń</td>
+                    <!-- Wyświetlanie klasy ucznia -->
+                    <td th:text="${ocena.uczen.klasa.nazwaKlasy}">Klasa</td>
+                    <!-- Wyświetlanie nazwy przedmiotu -->
+                    <td th:text="${ocena.przedmiot.nazwaPrzedmiotu}">Przedmiot</td>
+                    <!-- Wyświetlanie imienia i nazwiska nauczyciela -->
+                    <td th:text="${ocena.nauczyciel.imie + ' ' + ocena.nauczyciel.nazwisko}">Nauczyciel</td>
+                    <!-- Wyświetlanie daty oceny -->
+                    <td th:text="${#dates.format(ocena.dataOceny, 'yyyy-MM-dd')}">Data oceny</td>
+                    <td>
+                        <a class="btn btn-sm btn-secondary" th:href="@{'/oceny/edit/' + ${ocena.id}}">Edytuj</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-sm btn-danger" th:href="@{'/oceny/delete/' + ${ocena.id}}">Usuń</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

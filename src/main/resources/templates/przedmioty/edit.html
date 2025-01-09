@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+  <h1 class="text-center mt-3">Edytuj przedmiot</h1>
+  <hr/>
+  <form th:action="@{/przedmioty/save}" th:object="${przedmiot}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <div class="form-group">
+      <label for="nazwaPrzedmiotu">Nazwa Klasy</label>
+      <input type="text" class="form-control" id="nazwaPrzedmiotu" name="nazwaPrzedmiotu" th:field="*{nazwaPrzedmiotu}" required/>
+    </div>
+    <div class="form-group mt-3 text-right">
+      <button type="submit" class="btn btn-primary">Zapisz</button>
+      <a class="btn btn-secondary" th:href="@{/przedmioty/}">Anuluj</a>
+    </div>
+  </form>
+</div>
+</html>

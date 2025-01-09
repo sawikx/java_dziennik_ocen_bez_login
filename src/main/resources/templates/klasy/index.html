@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Lista Klas</h1>
+    <hr/>
+    <a class="btn btn-primary mb-3" th:href="@{/klasy/new}">Dodaj nową klasę</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nazwa Klasy</th>
+            <th>Wychowawca</th>
+            <th>Ilość Uczniów</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="klasa : ${listKlasy}">
+            <td th:text="${klasa.nazwaKlasy}"></td>
+            <td th:text="${klasa.wychowawca != null ? klasa.wychowawca.imie + ' ' + klasa.wychowawca.nazwisko : '---'}"></td>
+            <td th:text="${studentCounts[klasa.id]}"></td> <!-- Liczba uczniów -->
+            <td>
+                <a class="btn btn-sm btn-secondary" th:href="@{'/klasy/edit/' + ${klasa.id}}">Edytuj</a>
+                &nbsp;&nbsp;&nbsp;
+                <a class="btn btn-sm btn-danger" th:href="@{'/klasy/delete/' + ${klasa.id}}">Usuń</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

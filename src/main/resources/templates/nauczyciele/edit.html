@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Edytuj nauczyciela</h1>
+    <hr/>
+    <form th:action="@{/nauczyciele/save}" th:object="${nauczyciel}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="form-group">
+            <label for="imie">Imię</label>
+            <input type="text" class="form-control" id="imie" name="imie" th:field="*{imie}" required/>
+        </div>
+        <div class="form-group mt-3">
+            <label for="nazwisko">Nazwisko</label>
+            <input type="text" class="form-control" id="nazwisko" name="nazwisko" th:field="*{nazwisko}" required/>
+        </div>
+        <hr/>
+
+        <!-- Przypisanie klasy jako wychowawca -->
+        <div class="form-group mt-3">
+            <label for="klasy">Klasa (jako wychowawca)</label>
+            <select id="klasy" name="klasaId" class="form-control">
+                <option value="" th:text="'Brak klasy'"></option>
+                <option th:each="klasa : ${klasy}"
+                        th:value="${klasa.id}"
+                        th:text="${klasa.nazwaKlasy}"
+                        th:selected="${klasa.wychowawca?.id == nauczyciel.id}">
+                </option>
+            </select>
+        </div>
+        <hr/>
+
+        <!-- Tabela z przypisanymi przedmiotami -->
+        <h3>Przypisane przedmioty</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nazwa przedmiotu</th>
+                <th>Akcja</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="nauczycielPrzedmiot : ${przypisanePrzedmioty}">
+                <td th:text="${nauczycielPrzedmiot.przedmiot.nazwaPrzedmiotu}"></td>
+                <td>
+                    <form th:action="@{/nauczyciele/removeSubject/{nauczycielId}/{przedmiotId}(nauczycielId=${nauczyciel.id}, przedmiotId=${nauczycielPrzedmiot.przedmiot.id})}" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm">Usuń</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Tabela z dostępnymi przedmiotami -->
+        <h3>Dostępne przedmioty do przypisania</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nazwa przedmiotu</th>
+                <th>Akcja</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="przedmiot : ${dostepnePrzedmioty}">
+                <td th:text="${przedmiot.nazwaPrzedmiotu}"></td>
+                <td>
+                    <form th:action="@{/nauczyciele/addSubject/{nauczycielId}/{przedmiotId}(nauczycielId=${nauczyciel.id}, przedmiotId=${przedmiot.id})}" method="post">
+                        <button type="submit" class="btn btn-success btn-sm">Dodaj</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="form-group mt-3 text-right">
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+            <a class="btn btn-secondary" th:href="@{/nauczyciele/}">Anuluj</a>
+        </div>
+    </form>
+</div>
+</html>

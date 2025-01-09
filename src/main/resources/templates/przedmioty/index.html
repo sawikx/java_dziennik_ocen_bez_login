@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Lista przedmiotów</h1>
+    <hr/>
+    <div class="row mt-1">
+        <div class="col-12 text-right">
+            <a class="btn btn-primary" th:href="@{'/przedmioty/new'}">+ Nowy przedmiot</a>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nazwa</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="przedmiot : ${listPrzedmioty}">
+                    <td th:text="${przedmiot.id}">Id</td>
+                    <td th:text="${przedmiot.nazwaPrzedmiotu}">Nazwa</td>
+                    <td>
+                        <a class="btn btn-sm btn-secondary" th:href="@{'/przedmioty/edit/' + ${przedmiot.id}}">Edytuj</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-sm btn-danger" th:href="@{'/przedmioty/delete/' + ${przedmiot.id}}">Usuń</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

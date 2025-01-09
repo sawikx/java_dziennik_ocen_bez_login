@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Edytuj ocenę</h1>
+    <hr/>
+    <form th:action="@{/oceny/save}" th:object="${ocena}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="form-group">
+            <label for="uczen">Uczeń</label>
+            <select class="form-control" id="uczen" name="uczen" th:field="*{uczen.id}" th:each="uczen : ${uczniowie}" th:disabled="true">
+                <option th:value="${uczen.id}" th:text="${uczen.imie + ' ' + uczen.nazwisko}"></option>
+            </select>
+        </div>
+        <div class="form-group mt-3">
+            <label for="przedmiot">Przedmiot</label>
+            <select class="form-control" id="przedmiot" name="przedmiot" th:field="*{przedmiot.id}" th:each="przedmiot : ${przedmioty}" th:disabled="true">
+                <option th:value="${przedmiot.id}" th:text="${przedmiot.nazwaPrzedmiotu}"></option>
+            </select>
+        </div>
+        <div class="form-group mt-3">
+            <label for="ocena">Ocena</label>
+            <input type="number" min="1" max="6" class="form-control" id="ocena" name="ocena" th:field="*{ocena}" required/>
+        </div>
+        <div class="form-group mt-3 text-right">
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+            <a class="btn btn-secondary" th:href="@{/oceny/}">Anuluj</a>
+        </div>
+    </form>
+</div>
+</html>

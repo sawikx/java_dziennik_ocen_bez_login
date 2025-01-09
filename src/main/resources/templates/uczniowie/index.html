@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Lista uczniów</h1>
+    <hr/>
+    <div class="row mt-1">
+        <div class="col-12 text-right">
+            <a class="btn btn-primary" th:href="@{'/uczniowie/new'}">+ Nowy uczeń</a>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                    <th>Klasa</th>
+                    <th>Akcje</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${listUczniowie.isEmpty()}">
+                    <td colspan="5" class="text-center">Brak uczniów w bazie.</td>
+                </tr>
+                <tr th:each="uczen : ${listUczniowie}">
+                    <td th:text="${uczen.id}">Id</td>
+                    <td th:text="${uczen.imie}">Imię</td>
+                    <td th:text="${uczen.nazwisko}">Nazwisko</td>
+                    <td th:text="${uczen.klasa != null ? uczen.klasa.nazwaKlasy : 'Brak'}">Klasa</td>
+                    <td>
+                        <a class="btn btn-sm btn-secondary" th:href="@{'/uczniowie/edit/' + ${uczen.id}}">Edytuj</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-sm btn-danger" th:href="@{'/uczniowie/delete/' + ${uczen.id}}">Usuń</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

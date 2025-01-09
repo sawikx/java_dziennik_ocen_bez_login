@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Lista nauczycieli</h1>
+    <hr/>
+    <div class="row mt-1">
+        <div class="col-12 text-right">
+            <a class="btn btn-primary" th:href="@{'/nauczyciele/new'}">+ Nowy nauczyciel</a>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                    <th>Przedmioty</th>
+                    <th>Wychowawca</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="nauczyciel : ${listNauczyciele}">
+                    <td th:text="${nauczyciel.id}">Id</td>
+                    <td th:text="${nauczyciel.imie}">Imię</td>
+                    <td th:text="${nauczyciel.nazwisko}">Nazwisko</td>
+                    <td>
+                        <span th:each="przedmiot : ${lnp}"
+                            th:if="${przedmiot.nauczyciel.id == nauczyciel.id}"
+                            th:text="${przedmiot.przedmiot.nazwaPrzedmiotu} + ', '">
+                        </span>
+                    </td>
+                    <td th:text="${wychowawcyInfo[nauczyciel.id]}"></td>
+                    <td>
+                        <a class="btn btn-sm btn-secondary" th:href="@{'/nauczyciele/edit/' + ${nauczyciel.id}}">Edytuj</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-sm btn-danger" th:href="@{'/nauczyciele/delete/' + ${nauczyciel.id}}">Usuń</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

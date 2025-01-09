@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Dodaj Nową Klasę</h1>
+    <hr/>
+    <form th:action="@{/klasy/save}" th:object="${klasy}" method="post">
+        <div class="form-group">
+            <label for="nazwaKlasy">Nazwa Klasy</label>
+            <input type="text" class="form-control" id="nazwaKlasy" name="nazwaKlasy" th:field="*{nazwaKlasy}" required/>
+        </div>
+        <div class="form-group mt-3">
+            <label for="wychowawca">Wychowawca</label>
+            <select id="wychowawca" class="form-control" name="wychowawca.id" th:field="*{wychowawca.id}" required>
+                <option value="">Wybierz wychowawcę</option>
+                <option th:each="nauczyciel : ${listNauczyciele}" th:value="${nauczyciel.id}" th:text="${nauczyciel.imie + ' ' + nauczyciel.nazwisko}">
+                </option>
+            </select>
+        </div>
+        <div class="form-group mt-3 text-right">
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+            <a class="btn btn-secondary" th:href="@{/klasy/}">Anuluj</a>
+        </div>
+    </form>
+</div>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main_layout.html}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+
+<div layout:fragment="content">
+    <h1 class="text-center mt-3">Dodaj nową ocenę</h1>
+    <hr/>
+    <form th:action="@{/oceny/save}" th:object="${ocena}" method="post">
+        <!-- Wybór klasy -->
+        <label for="klasa">Klasa</label>
+        <select class="form-control" id="klasa" onchange="fetchUczniowie(this.value)">
+            <option value="" disabled selected>Wybierz klasę</option>
+            <option th:each="klasa : ${klasy}" th:value="${klasa.id}" th:text="${klasa.nazwaKlasy}"></option>
+        </select>
+        <!-- Wybór ucznia -->
+        <label for="uczen">Uczeń</label>
+        <select class="form-control" id="uczen" name="uczen" th:field="*{uczen}">
+            <option value="" disabled selected>Wybierz ucznia</option>
+        </select>
+        <!-- Wybór przedmiotu -->
+        <div class="form-group">
+            <label for="przedmiot">Przedmiot</label>
+            <select class="form-control" id="przedmiot" name="przedmiot.id" th:field="*{przedmiot.id}" onchange="fetchNauczyciele()">
+                <option value="" disabled selected>Wybierz przedmiot</option>
+                <option th:value="${przedmiot.id}" th:text="${przedmiot.nazwaPrzedmiotu}" th:each="przedmiot : ${przedmioty}"></option>
+            </select>
+        </div>
+
+        <!-- Wybór nauczyciela -->
+        <div class="form-group">
+            <label for="nauczyciel">Nauczyciel</label>
+            <select class="form-control" id="nauczyciel" name="nauczyciel.id" th:field="*{nauczyciel.id}">
+                <option value="" disabled selected>Wybierz nauczyciela</option>
+                <!-- Opcje dla nauczycieli będą dodawane dynamicznie za pomocą JavaScript -->
+            </select>
+        </div>
+        <!-- Wybór oceny -->
+        <div class="form-group">
+            <label for="ocena">Ocena</label>
+            <input type="number" min="1" max="6" class="form-control" id="ocena" name="ocena" th:field="*{ocena}" required/>
+        </div>
+
+        <!-- Data oceny -->
+        <div class="form-group">
+            <label for="dataOceny">Data oceny</label>
+            <input type="date" class="form-control" id="dataOceny" name="dataOceny" th:field="*{dataOceny}" required/>
+        </div>
+
+        <div class="form-group mt-3 text-right">
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+            <a class="btn btn-secondary" th:href="@{/oceny/}">Anuluj</a>
+        </div>
+    </form>
+    <script>
+        function fetchUczniowie(klasaId) {
+    fetch(`/uczniowie/byKlasa/${klasaId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const uczniowieSelect = document.getElementById("uczen");
+            uczniowieSelect.innerHTML = "<option value='' disabled selected>Wybierz ucznia</option>";
+            data.forEach(uczen => {
+                const option = document.createElement("option");
+                option.value = uczen.id;
+                option.textContent = `${uczen.imie} ${uczen.nazwisko}`;
+                uczniowieSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error("Błąd podczas pobierania danych:", error);
+        });
+}
+
+function fetchNauczyciele() {
+    const przedmiotId = document.getElementById('przedmiot').value;
+
+    if (!przedmiotId) {
+        console.log("Przedmiot nie został wybrany.");
+        return;
+    }
+
+    fetch(`/nauczyciele/byPrzedmiot/${przedmiotId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const nauczycieleSelect = document.getElementById('nauczyciel');
+            nauczycieleSelect.innerHTML = '<option value="" disabled selected>Wybierz nauczyciela</option>';
+
+            // Sprawdzamy, czy otrzymaliśmy pojedynczy obiekt lub tablicę
+            if (Array.isArray(data)) {
+                data.forEach(nauczyciel => {
+                    const option = document.createElement('option');
+                    option.value = nauczyciel.id;
+                    option.textContent = `${nauczyciel.imie} ${nauczyciel.nazwisko}`;
+                    nauczycieleSelect.appendChild(option);
+                });
+            } else {
+                // Jeśli to jest pojedynczy obiekt, dodajemy go bezpośrednio
+                const option = document.createElement('option');
+                option.value = data.id;
+                option.textContent = `${data.imie} ${data.nazwisko}`;
+                nauczycieleSelect.appendChild(option);
+            }
+        })
+        .catch(error => {
+            console.error('Błąd podczas pobierania nauczycieli:', error);
+            alert('Błąd podczas pobierania nauczycieli: ' + error.message);
+        });
+}
+    </script>
+</div>
+</html>
